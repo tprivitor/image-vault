@@ -8,9 +8,7 @@
       font-family: system-ui, sans-serif;
       padding: 1rem;
     }
-    h1 {
-      margin-bottom: 0.5rem;
-    }
+    h1 { margin-bottom: 0.5rem; }
     a.back {
       display: inline-block;
       margin-bottom: 1rem;
@@ -18,9 +16,7 @@
       text-decoration: none;
       color: #2563eb;
     }
-    a.back:hover {
-      text-decoration: underline;
-    }
+    a.back:hover { text-decoration: underline; }
     .msg {
       font-size: 0.9rem;
       color: #6b7280;
@@ -31,9 +27,7 @@
       grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
       gap: 1rem;
     }
-    .card {
-      text-align: center;
-    }
+    .card { text-align: center; }
     .card img {
       max-width: 100%;
       height: 96px;
@@ -55,9 +49,7 @@
       background: #f3f4f6;
       cursor: pointer;
     }
-    .copy-btn:active {
-      background: #e5e7eb;
-    }
+    .copy-btn:active { background: #e5e7eb; }
   </style>
 </head>
 <body>
@@ -72,14 +64,13 @@
   const owner  = "tprivitor";
   const repo   = "image-vault";
   const branch = "main";
-  const repoBasePath = "/image-vault/"; // GitHub Pages base path
+  const repoBasePath = "/image-vault/";
 
-  // Derive folder path from current URL, e.g. /image-vault/img/apk-icons/ -> img/apk-icons
   let folderPath = window.location.pathname;
   if (folderPath.startsWith(repoBasePath)) {
     folderPath = folderPath.slice(repoBasePath.length);
   }
-  folderPath = folderPath.replace(/^\/+/, "").replace(/\/+$/, ""); // trim slashes
+  folderPath = folderPath.replace(/^\/+/, "").replace(/\/+$/, "");
 
   const apiUrl   = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
   const grid     = document.getElementById("grid");
@@ -107,19 +98,17 @@
         return;
       }
 
-      statusEl.textContent = ""; // clear "Loading…"
+      statusEl.textContent = "";
 
       files.forEach(item => {
         const fileName = item.name;
-
-        // Raw CDN URL
         const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${folderPath}/${fileName}`;
 
         const card = document.createElement("div");
         card.className = "card";
 
         const link = document.createElement("a");
-        link.href = fileName;      // relative to this folder
+        link.href = fileName;
         link.target = "_blank";
 
         const img = document.createElement("img");
@@ -142,11 +131,8 @@
               const oldText = button.textContent;
               button.textContent = "✅ Copied!";
               setTimeout(() => button.textContent = oldText, 1200);
-            }).catch(() => {
-              alert(rawUrl);
-            });
+            }).catch(() => alert(rawUrl));
           } else {
-            // Fallback if clipboard API isn't available
             alert(rawUrl);
           }
         });
