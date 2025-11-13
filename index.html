@@ -30,17 +30,9 @@
       text-decoration: none;
       color: inherit;
     }
-    .card:hover {
-      border-color: #3b82f6;
-    }
-    .card h2 {
-      font-size: 1rem;
-      margin-bottom: 0.25rem;
-    }
-    .card p {
-      font-size: 0.85rem;
-      color: #6b7280;
-    }
+    .card:hover { border-color: #3b82f6; }
+    .card h2 { font-size: 1rem; margin-bottom: 0.25rem; }
+    .card p { font-size: 0.85rem; color: #6b7280; }
   </style>
 </head>
 <body>
@@ -63,7 +55,6 @@
   const statusEl = document.getElementById("status");
 
   function prettyName(name) {
-    // apk-icons -> Apk Icons
     return name
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, c => c.toUpperCase());
@@ -93,7 +84,7 @@
       folders.forEach(item => {
         const a = document.createElement("a");
         a.className = "card";
-        a.href = `${imgRoot}/${item.name}/`;   // e.g. img/apk-icons/
+        a.href = `${imgRoot}/${item.name}/`;
 
         const h2 = document.createElement("h2");
         h2.textContent = prettyName(item.name);
@@ -113,4 +104,4 @@
 </script>
 
 </body>
-</html>
+</html></html>
