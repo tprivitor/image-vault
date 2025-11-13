@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>apk-icons · Image Vault</title>
+  <link rel="stylesheet" href="/image-vault/style.css">
+  <style>
+    /* fallback if style.css doesn't exist yet */
+    body { font-family: system-ui, sans-serif; padding: 1rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); gap: 1rem; }
+    .card { text-align: center; }
+    .card img { max-width: 100%; height: 96px; object-fit: contain; display: block; margin: 0 auto 0.25rem; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<h1>apk-icons</h1>
+<p><a href="/image-vault/">← Back to Image Vault</a></p>
+
+<main class="grid" id="grid"></main>
+
+<script>
+  // 👇 THIS is the only part you maintain:
+  const files = [
+    "minecraft.png",
+    "games_sonic.png",
+    "misc_games.png",
+    "Downloads 1.png",
+    "Downloads 2.png",
+    "Downloads 3.png",
+    "Downloads 4.png",
+    "Downloads 5.png",
+    "Downloads 6.png",
+    "Favorites.png",
+    "Games 4.png",
+    "Halloween.png",
+    "Harddrive 1.png",
+    "Harddrive 2.png",
+    "Hardware.png",
+    "Music 1.png",
+    "Music 2.png"
+    // add new filenames here as you upload them
+  ];
+
+  const grid = document.getElementById("grid");
+
+  files.forEach(name => {
+    const a = document.createElement("a");
+    a.className = "card";
+    a.href = name;
+    a.target = "_blank";
+
+    const img = document.createElement("img");
+    img.src = name;
+    img.alt = name;
+
+    const span = document.createElement("span");
+    span.textContent = name;
+
+    a.appendChild(img);
+    a.appendChild(span);
+    grid.appendChild(a);
+  });
+</script>
+
+</body>
+</html>
