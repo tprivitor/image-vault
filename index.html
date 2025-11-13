@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>image-vault</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 1.5rem;
+    }
+    header { margin-bottom: 1.5rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.25rem; }
+    p.subtitle { color: #6b7280; margin-bottom: 0.75rem; }
+    .msg {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      border-color: #3b82f6;
+    }
+    .card h2 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .card p {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>image-vault</h1>
+  <p class="subtitle">Image Asset CDN Vault</p>
+</header>
+
+<div class="msg" id="status">Loading folders…</div>
+<main class="grid" id="grid"></main>
+
+<script>
+  const owner   = "tprivitor";
+  const repo    = "image-vault";
+  const imgRoot = "img"; // scan subfolders of /img
+
+  const apiUrl   = `https://api.github.com/repos/${owner}/${repo}/contents/${imgRoot}`;
+  const grid     = document.getElementById("grid");
+  const statusEl = document.getElementById("status");
+
+  function prettyName(name) {
+    // apk-icons -> Apk Icons
+    return name
+      .replace(/[-_]+/g, " ")
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  fetch(apiUrl)
+    .then(res => {
+      if (!res.ok) throw new Error("GitHub API error " + res.status);
+      return res.json();
+    })
+    .then(items => {
+      const folders = items
+        .filter(item =>
+          item.type === "dir" &&
+          !item.name.startsWith(".") &&
+          !item.name.startsWith("_")
+        )
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      if (folders.length === 0) {
+        statusEl.textContent = "No folders found under /img.";
+        return;
+      }
+
+      statusEl.textContent = "";
+
+      folders.forEach(item => {
+        const a = document.createElement("a");
+        a.className = "card";
+        a.href = `${imgRoot}/${item.name}/`;   // e.g. img/apk-icons/
+
+        const h2 = document.createElement("h2");
+        h2.textContent = prettyName(item.name);
+
+        const p = document.createElement("p");
+        p.textContent = `Assets in /${imgRoot}/${item.name}/`;
+
+        a.appendChild(h2);
+        a.appendChild(p);
+        grid.appendChild(a);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      statusEl.textContent = "Failed to load folders from GitHub API.";
+    });
+</script>
+
+</body>
+</html>
