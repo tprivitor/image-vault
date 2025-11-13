@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>image-vault</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 1.5rem;
+    }
+    header { margin-bottom: 1.5rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.25rem; }
+    p.subtitle { color: #6b7280; margin-bottom: 0.5rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      border-color: #3b82f6;
+    }
+    .card h2 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .card p {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>image-vault</h1>
+  <p class="subtitle">Image Asset CDN Vault</p>
+</header>
+
+<main class="grid">
+  <a class="card" href="img/test-icons/">
+    <h2>Test Icons</h2>
+    <p>Small app/game icons for testing.</p>
+  </a>
+
+  <a class="card" href="img/apk-icons/">
+    <h2>APK Icons</h2>
+    <p>Icon set for APK/app-related stuff.</p>
+  </a>
+
+  <!-- Add more folders here later:
+  <a class="card" href="img/wallpapers/">
+    <h2>Wallpapers</h2>
+    <p>Backgrounds and full-size art.</p>
+  </a>
+  -->
+</main>
+
+</body>
+</html>
