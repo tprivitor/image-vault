@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Image Vault Maintenance Guide</title>
+<style>
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+  }
+  h1, h2, h3 {
+    color: #58a6ff;
+  }
+  code {
+    background: #161b22;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+  pre {
+    background: #161b22;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #30363d;
+  }
+  .box {
+    background: #0f1724;
+    padding: 1rem 1.2rem;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin: 1.2rem 0;
+  }
+  a {
+    color: #79c0ff;
+  }
+  hr {
+    border: 0;
+    border-top: 1px solid #30363d;
+    margin: 2rem 0;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>📘 Image Vault – Maintenance Guide</h1>
+<p><i>(For Future Tom Who Forgot Everything)</i></p>
+
+<div class="box">
+This is your personal CDN + image browser running on GitHub Pages.<br>
+This page explains how to update, modify, expand, or fix anything.
+</div>
+
+<hr>
+
+<h2>1. Change Folder Emojis</h2>
+
+<p>In the <b>root index.html</b>, edit this object:</p>
+
+<pre><code>const folderIcons = {
+  "apk-icons": "📱",
+  "icons": "🎨",
+  "backgrounds": "🌌",
+  "game-assets": "🎮",
+  "test-icons": "🧪"
+};</code></pre>
+
+<p>Change the emoji → done.</p>
+
+<hr>
+
+<h2>2. Add a New Folder to the Root Page</h2>
+
+<p>In <b>root index.html</b>, find:</p>
+
+<pre><code>const folderData = [
+  { name: "Apk Icons", folder: "apk-icons", desc: "Assets in /img/apk-icons/" },
+  { name: "Backgrounds", folder: "backgrounds", desc: "Assets in /img/backgrounds/" },
+  { name: "Game Assets", folder: "game-assets", desc: "Assets in /img/game-assets/" },
+  { name: "Icons", folder: "icons", desc: "Assets in /img/icons/" },
+  { name: "Test Icons", folder: "test-icons", desc: "Assets in /img/test-icons/" }
+];</code></pre>
+
+<p>Add another entry like:</p>
+
+<pre><code>{ name: "My Folder", folder: "my-folder", desc: "Assets in /img/my-folder/" },</code></pre>
+
+<hr>
+
+<h2>3. Add a New Image Folder (Full Checklist)</h2>
+
+<ol>
+  <li>Create folder inside <code>/img/</code></li>
+  <li>Copy the template <code>index.html</code> into it</li>
+  <li>Open it → change <code>folderPath</code>:</li>
+</ol>
+
+<pre><code>const folderPath = "img/my-folder";</code></pre>
+
+<ol start="4">
+  <li>Add folder entry to <code>folderData</code></li>
+  <li>Add optional emoji in <code>folderIcons</code></li>
+</ol>
+
+<hr>
+
+<h2>4. How Image Loading Works</h2>
+
+<p>The folder index pages fetch files from GitHub using:</p>
+
+<pre><code>https://api.github.com/repos/tprivitor/image-vault/contents/img/folder-name</code></pre>
+
+<p>Javascript filters for extensions:</p>
+
+<pre><code>const imageExts = ["png", "jpg", "jpeg", "webp", "gif", "ico"];</code></pre>
+
+<hr>
+
+<h2>5. Resize Cards</h2>
+
+<p>For <b>root folder tiles</b>:</p>
+
+<pre><code>.folder-card {
+  width: 260px;
+  height: 150px;
+}</code></pre>
+
+<p>For <b>individual image cards</b>:</p>
+
+<pre><code>.card {
+  width: 180px;
+}</code></pre>
+
+<hr>
+
+<h2>6. Raw Image URLs</h2>
+
+<p>The “Copy Raw URL” buttons generate:</p>
+
+<pre><code>https://raw.githubusercontent.com/tprivitor/image-vault/main/img/folder/file.png</code></pre>
+
+<p>Use these in:</p>
+<ul>
+<li>start.me widgets</li>
+<li>GitHub Pages</li>
+<li>Google Docs</li>
+<li>Apps you build later</li>
+</ul>
+
+<hr>
+
+<h2>7. Folder Search</h2>
+
+<p>Root search bar code:</p>
+
+<pre><code>const search = document.getElementById("folderSearch");</code></pre>
+
+<p>Delete the input to hide it; edit CSS to restyle it.</p>
+
+<hr>
+
+<h2>8. Project Structure</h2>
+
+<pre><code>image-vault/
+│
+├── index.html
+│
+└── img/
+    ├── apk-icons/
+    │   └── index.html
+    ├── backgrounds/
+    │   └── index.html
+    ├── icons/
+    │   └── index.html
+    ├── test-icons/
+    │   └── index.html
+    └── (more here)</code></pre>
+
+<hr>
+
+<h2>🎯 Final Note from Past Tom</h2>
+
+<div class="box">
+Future Tom —  
+ You're reading this because you forgot how the hell this works.  
+This page saves you 5 hours of re-learning it.  
+
+You're welcome, you chaotic genius.
+</div>
+
+</body>
+</html>
