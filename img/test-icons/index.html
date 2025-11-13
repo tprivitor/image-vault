@@ -2,35 +2,84 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Gallery</title>
-  <link rel="stylesheet" href="/image-vault/style.css">
+  <title>test-icons · Image Vault</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 1rem;
+    }
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    a.back {
+      display: inline-block;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: #2563eb;
+    }
+    a.back:hover {
+      text-decoration: underline;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      text-align: center;
+    }
+    .card img {
+      max-width: 100%;
+      height: 96px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 0.25rem;
+    }
+    .card span {
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>apk-icons</h1>
-  <nav><a href="/image-vault/">← Back to Image Vault</a></nav>
-</header>
+<h1>test-icons</h1>
+<a class="back" href="/image-vault/">← Back to Image Vault</a>
 
-<main class="grid">
+<main class="grid" id="grid"></main>
 
-  <!-- 👇 Replace these with your files (lazy mode version coming next) -->
-  <a class="card" href="minecraft.png" target="_blank">
-    <img src="minecraft.png" alt="">
-    <span>minecraft.png</span>
-  </a>
+<script>
+  // 👇 Only thing you ever edit in this file:
+  const files = [
+    "apps_gamestop.png",
+    "apps_spark360.png",
+    "apps_supern64.png",
+    "games_sonic.png",
+    "minecraft.png",
+    "misc_games.png"
+  ];
 
-  <a class="card" href="games_sonic.png" target="_blank">
-    <img src="games_sonic.png" alt="">
-    <span>games_sonic.png</span>
-  </a>
+  const grid = document.getElementById("grid");
 
-  <a class="card" href="misc_games.png" target="_blank">
-    <img src="misc_games.png" alt="">
-    <span>misc_games.png</span>
-  </a>
+  files.forEach(name => {
+    const a = document.createElement("a");
+    a.className = "card";
+    a.href = name;
+    a.target = "_blank";
 
-</main>
+    const img = document.createElement("img");
+    img.src = name;
+    img.alt = name;
+
+    const span = document.createElement("span");
+    span.textContent = name;
+
+    a.appendChild(img);
+    a.appendChild(span);
+    grid.appendChild(a);
+  });
+</script>
 
 </body>
 </html>
