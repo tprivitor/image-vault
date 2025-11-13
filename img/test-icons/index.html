@@ -40,6 +40,11 @@
       font-size: 0.8rem;
       word-break: break-all;
     }
+    .msg {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -47,38 +52,65 @@
 <h1>test-icons</h1>
 <a class="back" href="/image-vault/">← Back to Image Vault</a>
 
+<div class="msg" id="status">Loading icons…</div>
 <main class="grid" id="grid"></main>
 
 <script>
-  // 👇 Only thing you ever edit in this file:
-  const files = [
-    "apps_gamestop.png",
-    "apps_spark360.png",
-    "apps_supern64.png",
-    "games_sonic.png",
-    "minecraft.png",
-    "misc_games.png"
-  ];
+  // GitHub repo + folder settings
+  const owner = "tprivitor";
+  const repo = "image-vault";
+  const folderPath = "img/test-icons"; // 👈 change this if you copy to another folder
 
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
   const grid = document.getElementById("grid");
+  const statusEl = document.getElementById("status");
 
-  files.forEach(name => {
-    const a = document.createElement("a");
-    a.className = "card";
-    a.href = name;
-    a.target = "_blank";
+  const imageExts = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".ico"];
 
-    const img = document.createElement("img");
-    img.src = name;
-    img.alt = name;
+  fetch(apiUrl)
+    .then(res => {
+      if (!res.ok) throw new Error("GitHub API error " + res.status);
+      return res.json();
+    })
+    .then(items => {
+      const files = items
+        .filter(item =>
+          item.type === "file" &&
+          item.name !== "index.html" &&
+          !item.name.startsWith(".") &&
+          imageExts.some(ext => item.name.toLowerCase().endsWith(ext))
+        )
+        .sort((a, b) => a.name.localeCompare(b.name));
 
-    const span = document.createElement("span");
-    span.textContent = name;
+      if (files.length === 0) {
+        statusEl.textContent = "No image files found in this folder.";
+        return;
+      }
 
-    a.appendChild(img);
-    a.appendChild(span);
-    grid.appendChild(a);
-  });
+      statusEl.textContent = ""; // clear "Loading..."
+
+      files.forEach(item => {
+        const a = document.createElement("a");
+        a.className = "card";
+        a.href = item.name;          // relative link
+        a.target = "_blank";
+
+        const img = document.createElement("img");
+        img.src = item.name;         // relative image src
+        img.alt = item.name;
+
+        const span = document.createElement("span");
+        span.textContent = item.name;
+
+        a.appendChild(img);
+        a.appendChild(span);
+        grid.appendChild(a);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      statusEl.textContent = "Failed to load icons from GitHub API.";
+    });
 </script>
 
 </body>
