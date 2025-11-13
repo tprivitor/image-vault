@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>my-image-vault</title>
+  <title>image-vault</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -11,12 +11,16 @@
     }
     header { margin-bottom: 1.5rem; }
     h1 { font-size: 1.8rem; margin-bottom: 0.25rem; }
-    p.subtitle { color: #6b7280; margin-bottom: 0.5rem; }
+    p.subtitle { color: #6b7280; margin-bottom: 0.75rem; }
+    .msg {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 1rem;
-      margin-top: 1rem;
     }
     .card {
       border: 1px solid #e5e7eb;
@@ -45,24 +49,64 @@
   <p class="subtitle">Image Asset CDN Vault</p>
 </header>
 
-<main class="grid">
-  <a class="card" href="img/test-icons/">
-    <h2>Test Icons</h2>
-    <p>Small app/game icons for testing.</p>
-  </a>
+<div class="msg" id="status">Loading folders…</div>
+<main class="grid" id="grid"></main>
 
-  <a class="card" href="img/apk-icons/">
-    <h2>APK Icons</h2>
-    <p>Icon set for APK/app-related stuff.</p>
-  </a>
+<script>
+  const owner = "tprivitor";
+  const repo = "image-vault";
+  const rootPath = "img"; // scan folders under /img
 
-  <!-- Add more folders here later:
-  <a class="card" href="img/wallpapers/">
-    <h2>Wallpapers</h2>
-    <p>Backgrounds and full-size art.</p>
-  </a>
-  -->
-</main>
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${rootPath}`;
+  const grid = document.getElementById("grid");
+  const statusEl = document.getElementById("status");
+
+  function prettyName(name) {
+    // apk-icons -> Apk Icons
+    return name
+      .replace(/[-_]+/g, " ")
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  fetch(apiUrl)
+    .then(res => {
+      if (!res.ok) throw new Error("GitHub API error " + res.status);
+      return res.json();
+    })
+    .then(items => {
+      const folders = items
+        .filter(item =>
+          item.type === "dir" &&
+          !item.name.startsWith(".") &&
+          !item.name.startsWith("_")
+        )
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      if (folders.length === 0) {
+        statusEl.textContent = "No folders found under /img.";
+        return;
+      }
+
+      statusEl.textContent = "";
+
+      folders.forEach(item => {
+        const a = document.createElement("a");
+        a.className = "card";
+        a.href = `${rootPath}/${item.name}/`; // e.g. img/apk-icons/
+        const title = document.createElement("h2");
+        title.textContent = prettyName(item.name);
+        const p = document.createElement("p");
+        p.textContent = `Assets in /${rootPath}/${item.name}/`;
+        a.appendChild(title);
+        a.appendChild(p);
+        grid.appendChild(a);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      statusEl.textContent = "Failed to load folder list from GitHub API.";
+    });
+</script>
 
 </body>
 </html>
