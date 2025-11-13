@@ -2,67 +2,115 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>apk-icons · Image Vault</title>
-  <link rel="stylesheet" href="/image-vault/style.css">
+  <title>My Image Vaultz</title>
   <style>
-    /* fallback if style.css doesn't exist yet */
-    body { font-family: system-ui, sans-serif; padding: 1rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); gap: 1rem; }
-    .card { text-align: center; }
-    .card img { max-width: 100%; height: 96px; object-fit: contain; display: block; margin: 0 auto 0.25rem; }
-    a { color: #2563eb; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 1rem;
+    }
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    a.back {
+      display: inline-block;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: #2563eb;
+    }
+    a.back:hover {
+      text-decoration: underline;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      text-align: center;
+    }
+    .card img {
+      max-width: 100%;
+      height: 96px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 0.25rem;
+    }
+    .card span {
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+    .msg {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
 
-<h1>apk-icons</h1>
-<p><a href="/image-vault/">← Back to Image Vault</a></p>
+<h1>My Image Vault</h1>
+<a class="back" href="/image-vault/">← Back to Image Vault</a>
 
+<div class="msg" id="status">Loading icons…</div>
 <main class="grid" id="grid"></main>
 
 <script>
-  // 👇 THIS is the only part you maintain:
-  const files = [
-    "minecraft.png",
-    "games_sonic.png",
-    "misc_games.png",
-    "Downloads 1.png",
-    "Downloads 2.png",
-    "Downloads 3.png",
-    "Downloads 4.png",
-    "Downloads 5.png",
-    "Downloads 6.png",
-    "Favorites.png",
-    "Games 4.png",
-    "Halloween.png",
-    "Harddrive 1.png",
-    "Harddrive 2.png",
-    "Hardware.png",
-    "Music 1.png",
-    "Music 2.png"
-    // add new filenames here as you upload them
-  ];
+  // GitHub repo + folder settings
+  const owner = "tprivitor";
+  const repo = "image-vault";
+  const folderPath = "img/apk-icons"; // 👈 change this if you copy to another folder
 
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
   const grid = document.getElementById("grid");
+  const statusEl = document.getElementById("status");
 
-  files.forEach(name => {
-    const a = document.createElement("a");
-    a.className = "card";
-    a.href = name;
-    a.target = "_blank";
+  const imageExts = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".ico"];
 
-    const img = document.createElement("img");
-    img.src = name;
-    img.alt = name;
+  fetch(apiUrl)
+    .then(res => {
+      if (!res.ok) throw new Error("GitHub API error " + res.status);
+      return res.json();
+    })
+    .then(items => {
+      const files = items
+        .filter(item =>
+          item.type === "file" &&
+          item.name !== "index.html" &&
+          !item.name.startsWith(".") &&
+          imageExts.some(ext => item.name.toLowerCase().endsWith(ext))
+        )
+        .sort((a, b) => a.name.localeCompare(b.name));
 
-    const span = document.createElement("span");
-    span.textContent = name;
+      if (files.length === 0) {
+        statusEl.textContent = "No image files found in this folder.";
+        return;
+      }
 
-    a.appendChild(img);
-    a.appendChild(span);
-    grid.appendChild(a);
-  });
+      statusEl.textContent = ""; // clear "Loading..."
+
+      files.forEach(item => {
+        const a = document.createElement("a");
+        a.className = "card";
+        a.href = item.name;          // relative link
+        a.target = "_blank";
+
+        const img = document.createElement("img");
+        img.src = item.name;         // relative image src
+        img.alt = item.name;
+
+        const span = document.createElement("span");
+        span.textContent = item.name;
+
+        a.appendChild(img);
+        a.appendChild(span);
+        grid.appendChild(a);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      statusEl.textContent = "Failed to load icons from GitHub API.";
+    });
 </script>
 
 </body>
