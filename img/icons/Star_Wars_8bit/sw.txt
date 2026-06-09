@@ -1,0 +1,13 @@
+Star Wars Icons for Windows
+From Iconian Fonts - http://www.iconian.com
+
+Freely Distributed
+
+This zip file includes 65 icons (256 colors).
+
+Star Wars and its characters are trademarks of Lucas Films. These icons are for non-profit purposes, with no intent to infringe on the rights of the trademark holders. 
+
+In Windows 95/98/NT, how to get 256 color icons to appear:
+
+Change your color display to 16-bit or higher. Double-click on the Display icon in Control Panel, and click on the Settings tab. Adjust the Color Palette to your 16-bit or higher. (Your video card or monitor may not support the higher color depths necessary to use 256 color icons.) 
+You need to tell Windows 95/98/NT to use 256 color icons by double-clicking on the Display icon in Control Panel, and check "Show Icon Using All Possible Colors" in the Effects tab. 
